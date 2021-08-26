@@ -1,42 +1,39 @@
 import React from 'react'
+import useWindowDimensions from './components/utils/useWindowDimensions'
 
-import Form from './components/Form'
+import Page from './components/Page'
 
 const App = () => {
-  return (
-    <div style={localStyles.container}>
-      <div style={localStyles.content}>
-        <div style={localStyles.formContainer}>
-          <Form />
-        </div>
-        <div style={localStyles.bannerContainer}>bbb</div>
-      </div>
-    </div>
-  );
-}
+  const { width } = useWindowDimensions();
 
-const localStyles = {
-  container: {
-    display: 'flex',
-    textAlign: 'center',
-    alignItems: 'center',
-    justufyContent: 'center',
-  },
-  content: {
-      display: 'flex',
-      backgroundColor: 'white',
-      boxShadow: '0px 27px 28px -4px rgba(0,0,0,0.73)',
-      width: '100%',
-      margin: '5% 10%',
-  },
-  formContainer: {
-      flex: '1',
-      textAlign: 'center',
-  },
-  bannerContainer: {
-      flex: '1',
-      textAlign: 'center',
-  },
+  const localStyles = {
+    container: {
+      margin: `0 ${width < 480 ? '10px' : '100px'}`,
+    },
+    header: {
+      padding: `0 ${width < 480 ? '20px' : '160px'}`,
+      backgroundColor: '#F8F8F8',
+      marginBottom: '70px',
+      ...(width < 480 && { textAlign: 'center' })
+    },
+    imgContainer: {
+      width: '200px',
+      padding: '20px 0'
+    }
+  }
+
+  return (
+    <>
+      <div style={localStyles.header}>
+        <div style={localStyles.imgContainer}>
+          <img src={'logo.png'} style={{ height: 'auto', width: '100%' }} alt="Logo"/>
+        </div>
+      </div>
+      <div style={localStyles.container}>
+          <Page />
+      </div>
+    </>
+  );
 }
 
 export default App;
