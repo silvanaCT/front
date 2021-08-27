@@ -1,5 +1,4 @@
 import React from 'react'
-import locale from 'antd/es/date-picker/locale/pt_BR'
 import { Input, Row, Col } from 'antd';
 
 const ContactDataInputs = ({

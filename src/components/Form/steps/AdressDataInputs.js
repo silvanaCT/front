@@ -108,7 +108,7 @@ const AdressDataInputs = ({
                 }))
               }).catch((err) => console.error("Erro: " + err));
         }
-    }, [formValues])
+    }, [formValues, setFormValues])
 
     return (
         <> 
