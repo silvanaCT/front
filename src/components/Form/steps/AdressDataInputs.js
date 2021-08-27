@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import locale from 'antd/es/date-picker/locale/pt_BR'
-import { Input, Row, Col, DatePicker } from 'antd';
+import { Input, Row, Col } from 'antd';
 
 import api from '../../../api';
 
