@@ -7,6 +7,8 @@ import ContactDataInputs from './steps/ContactDataInputs';
 
 import useWindowDimensions from '../utils/useWindowDimensions';
 
+import api from '../../api';
+
 const Index = ({ setPageStep }) => {
     const [step, setStep] = useState(0)
     const [formValues, setFormValues] = useState({
@@ -27,8 +29,8 @@ const Index = ({ setPageStep }) => {
         email: null,
         rg: null,
         cpf: null,
-        hasCar: null,
-        hasDriversLicence: null,
+        hasCar: false,
+        hasDriversLicence: false,
     })
 
     const { width } = useWindowDimensions();
@@ -36,12 +38,62 @@ const Index = ({ setPageStep }) => {
     const inputFieldsMap = {
         0: <PesonalDataInputs setFormValues={setFormValues}/>,
         1: <ContactDataInputs setFormValues={setFormValues}/>,
-        2: <AdressDataInputs setFormValues={setFormValues}/>
+        2: <AdressDataInputs setFormValues={setFormValues} formValues={formValues}/>
     }
 
     const handleSubmit = () => {
-        console.log('realizando requisição')
-        setPageStep((prevState) => prevState + 1)
+        const {
+            fullName,
+            birthDate,
+            sex,
+            civilState,
+            street,
+            neighborhood,
+            city,
+            cep,
+            state,
+            number,
+            telephone1,
+            telephone2,
+            cellphoneNumber,
+            contactInfo,
+            email,
+            rg,
+            cpf,
+            hasCar,
+            hasDriversLicence,
+        } = formValues
+
+        console.log(typeof telephone1)
+
+        api.post('/candidate', {
+            fullName,
+            birthDate,
+            sex,
+            adress: {
+                street,
+                neighborhood,
+                city,
+                cep,
+                state,
+                number,
+            },
+            civilState,
+            state,
+            number,
+            telephone1,
+            telephone2,
+            cellphoneNumber,
+            contactInfo,
+            email,
+            rg,
+            cpf,
+            hasCar,
+            hasDriversLicence,
+          })
+          .then(() => setPageStep((prevState) => prevState + 1))
+          .catch((err) => console.error("Erro: " + err))
+        
     }
 
     return (

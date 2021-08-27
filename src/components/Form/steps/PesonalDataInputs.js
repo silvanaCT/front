@@ -38,8 +38,6 @@ const PesonalDataInputs = ({
         </div>
     )
 
-
-
     return (
         <> 
             { inputVarMap.map((item, i) => inputLine({ ...item, key: i })) }

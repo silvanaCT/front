@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import locale from 'antd/es/date-picker/locale/pt_BR'
 import { Input, Row, Col, DatePicker } from 'antd';
 
+import api from '../../../api';
+
 const AdressDataInputs = ({
     setFormValues,
+    formValues,
 }) => {
+    const {
+        city,
+        neighborhood,
+        cep,
+        state,
+        street,
+    } = formValues
+
     const inputLine = ({
         label,
         placeholder,
         stateName,
+        value,
         key,
     }) => (
         <div key={key}>
@@ -18,6 +30,7 @@ const AdressDataInputs = ({
                     <br style={localStyles.br}/>
                     <Input
                     placeholder={placeholder}
+                    value={value && value}
                     onChange={(e) => setFormValues(
                         (prevState) => ({ 
                             ...prevState,
@@ -29,7 +42,74 @@ const AdressDataInputs = ({
         </div>
     )
 
+    const inputVarMap = [
+        {
+            label: 'Rua',
+            placeholder: 'Nome da rua',
+            stateName: 'street',
+            value: street
+        },
+        {
+            label: 'Número',
+            placeholder: 'Número da residencia',
+            stateName: 'number'
+        },
+        {
+            label: 'Bairro',
+            placeholder: 'Nome do bairro',
+            stateName: 'neighborhood',
+            value: neighborhood
+        },
+        {
+            label: 'Cidade',
+            placeholder: 'Nome da cidade',
+            stateName: 'city',
+            value: city
+        },
+        {
+            label: 'CEP',
+            placeholder: '99999999 (apenas números)',
+            stateName: 'cep',
+            value: cep
+        },
+        {
+            label: 'Estado',
+            placeholder: 'Nome do estado',
+            stateName: 'state',
+            value: state
+        },
+    ]
 
+    useEffect(() => {
+        const {
+            cep
+        } = formValues
+
+        if (cep && (cep.length === 8)) {
+            api({
+                method: 'get',
+                url: `https://viacep.com.br/ws/${cep}/json/`
+              })
+              .then(({ data }) => {
+                const {
+                    bairro: neighborhood,
+                    cep,
+                    localidade: city,
+                    logradouro: street,
+                    uf: state,
+                } = data
+
+                setFormValues((prevState) => ({ 
+                    ...prevState,
+                    neighborhood,
+                    cep,
+                    city,
+                    street,
+                    state
+                }))
+              }).catch((err) => console.error("Erro: " + err));
+        }
+    }, [formValues])
 
     return (
         <> 
@@ -51,38 +131,5 @@ const localStyles = {
         display: 'none'
     }
 }
-
-const inputVarMap = [
-    {
-        label: 'Rua',
-        placeholder: 'Nome da rua',
-        stateName: 'street'
-    },
-    {
-        label: 'Número',
-        placeholder: 'Número da residencia',
-        stateName: 'number'
-    },
-    {
-        label: 'Bairro',
-        placeholder: 'Nome do bairro',
-        stateName: 'neighborhood'
-    },
-    {
-        label: 'Cidade',
-        placeholder: 'Nome da cidade',
-        stateName: 'city'
-    },
-    {
-        label: 'CEP',
-        placeholder: '99999999 (apenas números)',
-        stateName: 'cep'
-    },
-    {
-        label: 'Estado',
-        placeholder: 'Nome do estado',
-        stateName: 'state'
-    },
-]
 
 export default AdressDataInputs
