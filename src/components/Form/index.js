@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Button, Row, Col } from 'antd';
 
 import PesonalDataInputs from './steps/PesonalDataInputs'
 import AdressDataInputs from './steps/AdressDataInputs'
@@ -35,65 +34,39 @@ const Index = ({ setPageStep }) => {
 
     const { width } = useWindowDimensions();
 
-    const inputFieldsMap = {
-        0: <PesonalDataInputs setFormValues={setFormValues}/>,
-        1: <ContactDataInputs setFormValues={setFormValues}/>,
-        2: <AdressDataInputs setFormValues={setFormValues} formValues={formValues}/>
-    }
-
-    const handleSubmit = () => {
-        const {
-            fullName,
-            birthDate,
-            sex,
-            civilState,
-            street,
-            neighborhood,
-            city,
-            cep,
-            state,
-            number,
-            telephone1,
-            telephone2,
-            cellphoneNumber,
-            contactInfo,
-            email,
-            rg,
-            cpf,
-            hasCar,
-            hasDriversLicence,
-        } = formValues
-
-        console.log(typeof telephone1)
+    const handleSubmit = (input) => {
+        const { birthDate } = input
 
         api.post('/candidate', {
-            fullName,
-            birthDate,
-            sex,
-            adress: {
-                street,
-                neighborhood,
-                city,
-                cep,
-                state,
-                number,
-            },
-            civilState,
-            state,
-            number,
-            telephone1,
-            telephone2,
-            cellphoneNumber,
-            contactInfo,
-            email,
-            rg,
-            cpf,
-            hasCar,
-            hasDriversLicence,
+            ...input,
+            birthDate: birthDate.toString()
           })
-          .then(() => setPageStep((prevState) => prevState + 1))
+          .then(() => {
+            setPageStep((prevState) => prevState + 1)
+          })
           .catch((err) => console.error("Erro: " + err))
-        
+    }
+
+    const inputFieldsMap = {
+        0: (
+            <PesonalDataInputs 
+                setFormValues={setFormValues} 
+                formValues={formValues} 
+                setStep={setStep}/>
+        ),
+        1: (
+            <ContactDataInputs 
+                setFormValues={setFormValues} 
+                formValues={formValues} 
+                setStep={setStep}/>
+        ),
+        2: (
+            <AdressDataInputs 
+                setFormValues={setFormValues} 
+                formValues={formValues} 
+                setStep={setStep}
+                handleSubmit={handleSubmit}/>
+        )
     }
 
     return (
@@ -112,17 +85,6 @@ const Index = ({ setPageStep }) => {
                 }
                 <h3 style={localStyles.formTitle}>{formTitleMap[step]}</h3>
                 {inputFieldsMap[step]}
-                <Row>
-                    <Col xs={24}>
-                        <div style={localStyles.buttonContainer}>
-                            <Button
-                            onClick={() => step < 2 ? setStep(step + 1) : handleSubmit()}
-                            type="primary">
-                                { step < 2 ? 'Próximo' : 'Enviar' }
-                            </Button>
-                        </div>
-                    </Col>
-                </Row>
             </div>
         </>
     )
