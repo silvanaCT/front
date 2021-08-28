@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { notification } from 'antd';
 
 import PesonalDataInputs from './steps/PesonalDataInputs'
 import AdressDataInputs from './steps/AdressDataInputs'
@@ -10,6 +11,7 @@ import api from '../../api';
 
 const Index = ({ setPageStep }) => {
     const [step, setStep] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
     const [formValues, setFormValues] = useState({
         fullName: null,
         birthDate: null,
@@ -37,14 +39,25 @@ const Index = ({ setPageStep }) => {
     const handleSubmit = (input) => {
         const { birthDate } = input
 
-        api.post('/candidate', {
-            ...input,
-            birthDate: birthDate.toString()
-          })
-          .then(() => {
-            setPageStep((prevState) => prevState + 1)
-          })
-          .catch((err) => console.error("Erro: " + err))
+        if (!isLoading) {
+            setIsLoading(true)
+            api.post('/candidate', {
+                    ...input,
+                    birthDate: birthDate.toString()
+                })
+                .then(() => {
+                    setIsLoading(false)
+                    setPageStep((prevState) => prevState + 1)
+                })
+                .catch((err) => {
+                    console.log(err.response)
+                    setIsLoading(false)
+                    notification.open({
+                        message: 'Erro',
+                        description: err.response.data.error
+                    })
+                })
+        }
     }
 
     const inputFieldsMap = {

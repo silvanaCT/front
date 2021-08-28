@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import locale from 'antd/es/date-picker/locale/pt_BR'
 import {
     Input,
@@ -18,13 +18,13 @@ const PesonalDataInputs = ({
     setStep,
 }) => {
     const [inputValues, setInputValues] = useState({
-        fullName: formValues.fullName,
-        cpf: formValues.cpf,
-        rg: formValues.rg,
-        intendedPosition: formValues.intendedPosition,
-        birthDate: formValues.birthDate,
-        civilState: formValues.civilState,
-        sex: formValues.sex,
+        fullName: null,
+        cpf: null,
+        rg: null,
+        intendedPosition: null,
+        birthDate: null,
+        civilState: null,
+        sex: null,
     })
     const [errorMessages, setErrorMessages] = useState({
         fullName: null,
@@ -35,6 +35,28 @@ const PesonalDataInputs = ({
         civilState: null,
         sex: null,
     })
+
+    useEffect(() => {
+        const {
+            fullName,
+            cpf,
+            rg,
+            intendedPosition,
+            birthDate,
+            civilState,
+            sex,
+        } = formValues
+
+        setInputValues({
+            fullName,
+            cpf,
+            rg,
+            intendedPosition,
+            birthDate,
+            civilState,
+            sex, 
+        })
+    }, [formValues, setInputValues])
 
     const inputLine = ({
         label,
@@ -60,7 +82,7 @@ const PesonalDataInputs = ({
                     }
                     <Input
                     placeholder={placeholder}
-                    value={value && value}
+                    value={value}
                     onChange={(e) => {
                         setErrorMessages((prevState) => ({ ...prevState, [stateName]: null }))
                         setInputValues(
@@ -127,7 +149,7 @@ const PesonalDataInputs = ({
             label: 'Nome completo',
             placeholder: 'Seu nome completo',
             stateName: 'fullName',
-            value: inputValues.fullName || formValues.fullName || '',
+            value: inputValues.fullName || '',
             error: errorMessages.fullName,
             required: true
         },
@@ -135,7 +157,7 @@ const PesonalDataInputs = ({
             label: 'CPF',
             placeholder: 'Apenas números',
             stateName: 'cpf',
-            value: inputValues.cpf || formValues.cpf || '',
+            value: inputValues.cpf || '',
             error: errorMessages.cpf,
             required: true
         },
@@ -143,7 +165,7 @@ const PesonalDataInputs = ({
             label: 'RG',
             placeholder: 'Apenas números',
             stateName: 'rg',
-            value: inputValues.rg || formValues.rg || '',
+            value: inputValues.rg || '',
             error: errorMessages.rg,
             required: true
         },
@@ -151,7 +173,7 @@ const PesonalDataInputs = ({
             label: 'Profissão',
             placeholder: 'Cargo desejado',
             stateName: 'intendedPosition',
-            value: inputValues.intendedPosition || formValues.intendedPosition || '',
+            value: inputValues.intendedPosition || '',
             error: errorMessages.intendedPosition,
             required: true
         },
@@ -173,7 +195,7 @@ const PesonalDataInputs = ({
                         }
                         <DatePicker
                             locale={locale}
-                            value={inputValues.birthDate || formValues.birthDate}
+                            value={inputValues.birthDate}
                             onChange={(date) => {
                                 setErrorMessages((prevState) => ({ ...prevState, birthDate: null }))
                                 setInputValues(
@@ -196,7 +218,7 @@ const PesonalDataInputs = ({
                     }
                     <Select 
                     style={{ width: 120 }} 
-                    value={inputValues.civilState || formValues.civilState}
+                    value={inputValues.civilState}
                     onChange={(value) => {
                         setErrorMessages((prevState) => ({ ...prevState, civilState: null }))
                         setInputValues(
@@ -224,7 +246,7 @@ const PesonalDataInputs = ({
                     }
                     <Select 
                     style={{ width: 120 }} 
-                    value={inputValues.sex || formValues.sex}
+                    value={inputValues.sex}
                     onChange={(value) => {
                         setErrorMessages((prevState) => ({ ...prevState, sex: null }))
                         setInputValues(

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input, Row, Col, Button } from 'antd';
 
 const ContactDataInputs = ({
@@ -58,6 +58,24 @@ const ContactDataInputs = ({
         </div>
     )
 
+    useEffect(() => {
+        const {
+            cellphoneNumber,
+            telephone1,
+            telephone2,
+            contactInfo,
+            email,
+        } = formValues
+
+        setInputValues({
+            cellphoneNumber,
+            telephone1,
+            telephone2,
+            contactInfo,
+            email,
+        })
+    }, [formValues, setInputValues])
+
     const handleConfirm = () => {
         const errorObj = {
             cellphoneNumber: null,
@@ -101,23 +119,23 @@ const ContactDataInputs = ({
             label: 'Celular',
             placeholder: '99928282828',
             stateName: 'cellphoneNumber',
-            value: inputValues.cellphoneNumber || formValues.cellphoneNumber || '',
+            value: inputValues.cellphoneNumber,
             error: errorMessages.cellphoneNumber,
             required: true
         },
         {
             label: 'Telefone fixo',
-            placeholder: '09872736',
+            placeholder: '0987273625',
             stateName: 'telephone1',
-            value: inputValues.telephone1 || formValues.telephone1 || '',
+            value: inputValues.telephone1,
             error: errorMessages.telephone1,
             required: true
         },
         {
             label: 'Telefone fixo secundário',
-            placeholder: '09872736',
+            placeholder: '0987273632',
             stateName: 'telephone2',
-            value: inputValues.telephone2 || formValues.telephone2 || '',
+            value: inputValues.telephone2,
             error: errorMessages.telephone2,
             required: false
         },
@@ -125,14 +143,14 @@ const ContactDataInputs = ({
             label: 'Informações adicionais para contato',
             placeholder: 'Telefone da mãe, pai, etc',
             stateName: 'contactInfo',
-            value: inputValues.contactInfo || formValues.contactInfo || '',
+            value: inputValues.contactInfo,
             required: false
         },
         {
             label: 'Email',
             placeholder: 'seuemail@email.com',
             stateName: 'email',
-            value: inputValues.email || formValues.email || '',
+            value: inputValues.email,
             error: errorMessages.email,
             required: true
         },

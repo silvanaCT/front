@@ -6,7 +6,6 @@ import api from '../../../api';
 const AdressDataInputs = ({
     formValues,
     setFormValues,
-    setStep,
     handleSubmit,
 }) => {
     const [inputValues, setInputValues] = useState({
@@ -70,42 +69,42 @@ const AdressDataInputs = ({
             label: 'CEP',
             placeholder: 'Apenas números',
             stateName: 'cep',
-            value: inputValues.cep || formValues.cep || '',
+            value: inputValues.cep,
             error: errorMessages.cep
         },
         {
             label: 'Rua',
             placeholder: 'Nome da rua',
             stateName: 'street',
-            value: inputValues.street || formValues.street || '',
+            value: inputValues.street,
             error: errorMessages.street
         },
         {
             label: 'Número',
             placeholder: 'Número da residencia',
             stateName: 'number',
-            value: inputValues.number || formValues.number || '',
+            value: inputValues.number,
             error: errorMessages.number
         },
         {
             label: 'Bairro',
             placeholder: 'Nome do bairro',
             stateName: 'neighborhood',
-            value: inputValues.neighborhood || formValues.neighborhood || '',
+            value: inputValues.neighborhood,
             error: errorMessages.neighborhood
         },
         {
             label: 'Cidade',
             placeholder: 'Nome da cidade',
             stateName: 'city',
-            value: inputValues.city || formValues.city || '',
+            value: inputValues.city,
             error: errorMessages.city
         },
         {
             label: 'Estado',
             placeholder: 'Nome do estado',
             stateName: 'state',
-            value: inputValues.state || formValues.state || '',
+            value: inputValues.state,
             error: errorMessages.state
         }
     ]
@@ -141,6 +140,27 @@ const AdressDataInputs = ({
         }
     }, [inputValues, setFormValues, setCalledCEP, calledCEP])
 
+    useEffect(() => {
+        const {
+            street,
+            neighborhood,
+            city,
+            cep,
+            state,
+            number,
+        } = formValues
+
+        setInputValues({
+            street,
+            neighborhood,
+            city,
+            cep,
+            state,
+            number,
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+
     const handleConfirm = () => {
         const errorObj = {
             street: null,
@@ -171,10 +191,8 @@ const AdressDataInputs = ({
         setErrorMessages({ ...errorObj })
 
         if (isAllowed(Object.entries(errorObj))) {
-            setFormValues((prevState) => {
-                handleSubmit({ ...prevState, adress: { ...inputValues } })
-                return { ...prevState, adress: { ...inputValues } }
-            })
+            handleSubmit({ ...formValues, adress: { ...inputValues } })
+            setFormValues((prevState) =>  ({ ...prevState, adress: { ...inputValues } }))
         }
     }
 
