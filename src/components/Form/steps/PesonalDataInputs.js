@@ -274,7 +274,7 @@ const PesonalDataInputs = ({
                                 hasDriversLicence: e.target.checked
                             })
                         )}>
-                            Tenho carteira de motorista <span style={{ color: 'red' }}>*</span>
+                            Tenho carteira de motorista
                         </Checkbox>
                     </div>
                 </Col>
@@ -288,7 +288,7 @@ const PesonalDataInputs = ({
                                 hasCar: e.target.checked
                             })
                         )}>
-                            Tenho carro <span style={{ color: 'red' }}>*</span>
+                            Tenho carro
                         </Checkbox>
                     </div>
                 </Col>
