@@ -50,11 +50,10 @@ const Index = ({ setPageStep }) => {
                     setPageStep((prevState) => prevState + 1)
                 })
                 .catch((err) => {
-                    console.log(err.response)
                     setIsLoading(false)
                     notification.open({
                         message: 'Erro',
-                        description: err.response.data.error
+                        description: err.response ? err.response.data.error : 'Erro de servidor'
                     })
                 })
         }
